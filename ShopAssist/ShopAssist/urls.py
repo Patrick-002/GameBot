@@ -16,9 +16,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from shop.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', index, name='index'),
+    path('add_to_cart/<str:game_title>/', add_to_cart, name='add_to_cart'),
+    path('cart/', cart, name='cart'),
+    path('remove_from_cart/<str:game_title>/', remove_from_cart, name='remove_from_cart'),
 ]
 
 # cd ShopAssist

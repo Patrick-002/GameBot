@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}Главная{% endblock %}
+
+{% block content %}
+<h1>Добро пожаловать в магазин игр!</h1>
+
+<div style="margin-top: 20px; margin-bottom: 20px;">
+    <br>
+    <br>
+    {% for game in games %}
+         <div style="margin-bottom: 20px; padding: 10px; border-bottom: 1px solid #ddd;">
+            <h2 style="margin-left: 10px;">{{ game.title }}</h2>
+            <p style="margin-left: 10px;">{{ game.description }}</p>
+            <div style="display: flex; align-items: center; justify-content: flex-start; margin-left: 10px;">
+                <span>{{ game.price }} руб.</span>
+                <form method="post" action="{% url 'add_to_cart' game.title %}" style="margin-left: 20px;">
+                    {% csrf_token %}
+                    <button type="submit" style="padding: 10px 20px; background-color: #007BFF; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer;">
+                        Купить
+                    </button>
+                </form>
+            </div>
+        </div>
+    {% endfor %}
+    <br>
+    <br>
+    <br>
+</div>
+
+<div class="pagination">
+    <span class="step-links">
+        {% if games.has_previous %}
+            <a href="?page=1">Первая</a>
+            <a href="?page={{ games.previous_page_number }}">Назад</a>
+        {% endif %}
+
+        <span class="current">
+            Страница {{ games.number }} из {{ games.paginator.num_pages }}
+        </span>
+
+        {% if games.has_next %}
+            <a href="?page={{ games.next_page_number }}">Вперёд</a>
+            <a href="?page={{ games.paginator.num_pages }}">Последняя</a>
+        {% endif %}
+    </span>
+</div>
+
+{% endblock %}
