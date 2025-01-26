@@ -29,7 +29,7 @@
     <h3>Общая сумма: {{ total_price }} руб.</h3>
 
     <!-- Кнопка оформления заказа -->
-    <form action="#" method="post">
+    <form action="{% url 'checkout' %}" method="post">
         {% csrf_token %}
         <button type="submit" style="
             padding: 10px 20px;
@@ -45,3 +45,13 @@
     <h2>Корзина пуста(((</h2>
 {% endif %}
 {% endblock %}
+
+{% if messages %}
+    <ul>
+        {% for message in messages %}
+            <li style="color: {% if message.tags == 'success' %}green{% elif message.tags == 'error' %}red{% else %}white{% endif %};">
+                {{ message }}
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}

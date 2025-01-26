@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}Мои игры{% endblock %}
+
+{% block content %}
+<h1>Мои игры</h1>
+
+{% if purchases %}
+    <ul>
+        {% for purchase in purchases %}
+        <li>
+            <strong>{{ purchase.game.title }}</strong> ({{ purchase.purchase_date|date:"d.m.Y H:i" }})
+        </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>Вы ещё не купили ни одной игры.</p>
+{% endif %}
+
+{% endblock %}

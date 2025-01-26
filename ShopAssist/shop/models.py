@@ -40,3 +40,13 @@ class CustomUser(AbstractUser):
     # Поля, которые запрашиваются при создании пользователя через manage.py
     REQUIRED_FIELDS = []
     objects = CustomUserManager()
+
+
+class Purchase(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="purchases",
+                             verbose_name="Пользователь")
+    game = models.ForeignKey(Game, on_delete=models.CASCADE, related_name="purchases", verbose_name="Игра")
+    purchase_date = models.DateTimeField(auto_now_add=True, verbose_name="Дата покупки")
+
+    def __str__(self):
+        return f"{self.user.username} - {self.game.title}"

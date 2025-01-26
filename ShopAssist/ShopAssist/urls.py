@@ -24,6 +24,11 @@ urlpatterns = [
     path('add_to_cart/<str:game_title>/', add_to_cart, name='add_to_cart'),
     path('cart/', cart, name='cart'),
     path('remove_from_cart/<str:game_title>/', remove_from_cart, name='remove_from_cart'),
+    path('register/', register, name='register'),
+    path('login/', user_login, name='login'),
+    path('logout/', user_logout, name='logout'),
+    path('checkout/', checkout, name='checkout'),
+    path('my_games/', my_games, name='my_games'),
 ]
 
 # cd ShopAssist

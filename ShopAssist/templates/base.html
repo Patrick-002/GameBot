@@ -12,17 +12,23 @@
             margin: 0;
             padding: 0;
         }
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #1a1a1a;
+        }
         nav ul {
             display: flex;
             list-style-type: none;
             padding: 0;
             margin: 0;
-            justify-content: center;
             gap: 15px;
         }
         nav ul li a {
             display: inline-block;
-            padding: 15px 25px;
+            padding: 10px 20px;
             text-decoration: none;
             background-color: #007BFF;
             color: white;
@@ -34,6 +40,33 @@
         nav ul li a:hover {
             background-color: #0056b3;
         }
+        .user-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .user-controls a, .user-controls form button {
+            padding: 10px 20px;
+            text-decoration: none;
+            background-color: #007BFF;
+            color: white;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+        }
+        .user-controls a:hover, .user-controls form button:hover {
+            background-color: #0056b3;
+        }
+        .user-controls form {
+            margin: 0;
+        }
+        .username {
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -44,12 +77,24 @@
                 <li><a href="http://127.0.0.1:8000/cart">Корзина</a></li>
                 <li><a href="http://127.0.0.1:8000/my_games">Мои игры</a></li>
             </ul>
+            <div class="user-controls">
+                {% if user.is_authenticated %}
+                    <span class="username">{{ user.username }}</span>
+                    <form method="post" action="{% url 'logout' %}">
+                        {% csrf_token %}
+                        <button type="submit">Выход</button>
+                    </form>
+                {% else %}
+                    <a href="{% url 'login' %}">Вход</a>
+                    <a href="{% url 'register' %}">Регистрация</a>
+                {% endif %}
+            </div>
         </nav>
     </header>
 
     <main>
         {% block content %}
-        <!-- Здесь будет основной контент страницы -->
+        <!-- основной контент страницы -->
         {% endblock %}
     </main>
 
