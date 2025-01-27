@@ -7,11 +7,11 @@
 
 {% if cart %}
     <ul>
-        {% for game_title, game_info in cart.items %}
+        {% for game_id, game_info in cart.items %}
             <li>
                 <strong>{{ game_info.title }}</strong><br>
                 Цена: {{ game_info.price }} руб.<br>
-                <form method="post" action="{% url 'remove_from_cart' game_title %}" style="display:inline;">
+                <form method="post" action="{% url 'remove_from_cart' game_id %}" style="display:inline;">
                     {% csrf_token %}
                     <button type="submit" style="
                         padding: 5px 10px;

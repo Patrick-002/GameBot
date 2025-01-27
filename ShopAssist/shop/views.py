@@ -9,10 +9,6 @@ from decimal import Decimal
 
 
 def index(request):
-    return render(request, 'shop/index.html')
-
-
-def index(request):
     games_list = Game.objects.all().order_by('id')
     paginator = Paginator(games_list, 10)
     page_number = request.GET.get('page')
@@ -23,28 +19,24 @@ def index(request):
 
 def add_to_cart(request, game_title):
     game = get_object_or_404(Game, title=game_title)
-
     cart = request.session.get('cart', {})
 
-    if game_title not in cart:
-        cart[game_title] = {
+    if str(game.id) not in cart:
+        cart[str(game.id)] = {
             'title': game.title,
             'price': float(game.price),
         }
 
     request.session['cart'] = cart
-
     return redirect('/')
 
 
-def remove_from_cart(request, game_title):
+def remove_from_cart(request, game_id):
     cart = request.session.get('cart', {})
 
-    if game_title in cart:
-        del cart[game_title]
-
-    request.session['cart'] = cart
-
+    if str(game_id) in cart:
+        del cart[str(game_id)]
+        request.session['cart'] = cart
     return redirect('cart')
 
 
@@ -111,13 +103,13 @@ def checkout(request):
     request.user.balance -= total_price
     request.user.save()
 
-    for game_id, item in cart.items():
+    for game_id in cart.keys():
         game = Game.objects.get(id=game_id)
         Purchase.objects.create(user=request.user, game=game)
 
     request.session['cart'] = {}
     messages.success(request, "Заказ успешно оформлен!")
-    return redirect('cart')
+    return redirect('my_games')
 
 
 @login_required
