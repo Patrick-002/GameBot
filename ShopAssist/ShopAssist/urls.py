@@ -20,10 +20,10 @@ from shop.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', index, name='index'),
-    path('add_to_cart/<str:game_title>/', add_to_cart, name='add_to_cart'),
+    path('', main, name='main'),
+    path('add_to_cart/<str:game_id>/', add_to_cart, name='add_to_cart'),
     path('cart/', cart, name='cart'),
-    path('remove_from_cart/<str:game_title>/', remove_from_cart, name='remove_from_cart'),
+    path('remove_from_cart/<str:game_id>/', remove_from_cart, name='remove_from_cart'),
     path('register/', register, name='register'),
     path('login/', user_login, name='login'),
     path('logout/', user_logout, name='logout'),

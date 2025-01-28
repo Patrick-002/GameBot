@@ -8,20 +8,20 @@ from django.contrib.auth.decorators import login_required
 from decimal import Decimal
 
 
-def index(request):
+def main(request):
     games_list = Game.objects.all().order_by('id')
     paginator = Paginator(games_list, 10)
     page_number = request.GET.get('page')
     games = paginator.get_page(page_number)
 
-    return render(request, 'index.html', {'games': games})
+    return render(request, 'main.html', {'games': games})
 
 
-def add_to_cart(request, game_title):
-    game = get_object_or_404(Game, title=game_title)
+def add_to_cart(request, game_id):
+    game = Game.objects.get(id=game_id)
     cart = request.session.get('cart', {})
 
-    if str(game.id) not in cart:
+    if game_id not in cart:
         cart[str(game.id)] = {
             'title': game.title,
             'price': float(game.price),
@@ -34,15 +34,15 @@ def add_to_cart(request, game_title):
 def remove_from_cart(request, game_id):
     cart = request.session.get('cart', {})
 
-    if str(game_id) in cart:
-        del cart[str(game_id)]
+    if game_id in cart:
+        del cart[game_id]
         request.session['cart'] = cart
     return redirect('cart')
 
 
 def cart(request):
     cart = request.session.get('cart', {})
-    total_price = sum(item['price'] for item in cart.values())  # Суммируем только цену
+    total_price = sum(item['price'] for item in cart.values())
     return render(request, 'cart.html', {'cart': cart, 'total_price': total_price})
 
 
@@ -87,7 +87,7 @@ def user_logout(request):
     return redirect('/')
 
 
-@login_required
+@login_required(login_url='/register/')
 def checkout(request):
     cart = request.session.get('cart', {})
     if not cart:
@@ -112,7 +112,7 @@ def checkout(request):
     return redirect('my_games')
 
 
-@login_required
+@login_required(login_url='/register/')
 def my_games(request):
     purchases = request.user.purchases.select_related('game')
     return render(request, 'my_games.html', {'purchases': purchases})
